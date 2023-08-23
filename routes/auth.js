@@ -1,4 +1,5 @@
 const express = require("express");
+const { body, validationResult } = require("express-validator");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const crypto = require("crypto");
@@ -21,12 +22,6 @@ passport.use(
         return done(null, false, { message: "Incorrect password" });
       }
       return done(null, user);
-      req.login(user, function (err) {
-        if (err) {
-          return next(err);
-        }
-        res.redirect("/");
-      });
     } catch (err) {
       return done(err);
     }
@@ -45,6 +40,45 @@ passport.deserializeUser(async function (id, done) {
     done(err);
   }
 });
+
+router.get("/sign-up", function (req, res, next) {
+  res.render("sign-up", { title: "Sign Up" });
+});
+
+router.post(
+  "/sign-up",
+  body("password")
+    .isLength({ min: 5 })
+    .withMessage("Password must be at least 5 characters."),
+  body("password-confirm")
+    .custom((value, { req }) => {
+      return value === req.body.password;
+    })
+    .withMessage("Passwords do not match."),
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/sign-up",
+  }),
+  function (req, res, next) {
+    bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
+      try {
+        const user = new User({
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          username: req.body.username,
+          password: hashedPassword,
+        });
+        const result = await user.save();
+        req.login(user, function (err) {
+          if (err) return next(err);
+        });
+        // res.redirect("/");
+      } catch (err) {
+        return next(err);
+      }
+    });
+  }
+);
 
 router.get("/log-in", function (req, res, next) {
   res.render("log-in", { title: "Log In" });
