@@ -4,8 +4,20 @@
 }
 
 body {
-  padding: 50px;
+  /* padding: 50px; */
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid var(--light-gray);
+}
+
+.header-buttons {
+  display: flex;
+  gap: 1rem;
 }
 
 a {
@@ -39,9 +51,9 @@ div .name {
   gap: 5px;
 }
 
-/* .first-name, .last-name {
-  width: 100%;
-} */
+.alt-option {
+  text-align: center;
+}
 
 input {
   background-color: var(--light-gray);
@@ -53,9 +65,11 @@ input {
   padding: 8px;
 }
 
-button {
+button, .button {
   align-self: center;
+  text-align: center;
   font-size: large;
+  text-decoration: none;
   width: 50%;
   color: white;
   background-color: var(--green);
@@ -64,7 +78,7 @@ button {
   padding: 3px;
 }
 
-button:hover {
+button:hover, .button:hover {
   cursor: pointer;
   background-color: white;
   border: 1px solid var(--green);
