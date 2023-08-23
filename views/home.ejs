@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <header>
+      <h1>MembersOnly</h1>
+      <div class="header-buttons">
+        <% if (!user) {%>
+          <a href="/log-in" class="button">Log In</a>
+          <a href="/sign-up" class="button">Sign Up</a>    
+        <% } else { %>
+          <h3><%= user.username %></h3>
+          <a href="/log-out" class="button">Log Out</a>
+        <% } %>
+      </div>
+    </header>
+    <% if (user) {%>
+      <h1>Welcome <%= user.fullName %></h1>
+      <% if (user.status === "Exclusive") {%>
+      <a href="/create-post" class="button">Create Post</a>
+      <% } else { %>
+        <form>
+          <h3>Know the secret passcode? Join the exclusive club!</h3>
+          <input name="passcode" type="text" placeholder="Secret Passcode" />
+        </form>
+        <% } %>
+    <% } %>
+  </body>
+</html>
